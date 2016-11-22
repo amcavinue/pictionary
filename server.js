@@ -9,14 +9,19 @@ var server = http.Server(app);
 var io = socket_io(server);
 
 io.on('connection', function (socket) {
+    socket.broadcast.emit('userOnline');
+    
     socket.on('drawing', function(position) {
         socket.broadcast.emit('drawing', position);
     });
     
-    socket.broadcast.emit('userOnline');
-    
     socket.on('progressDrawing', function(drawing) {
         socket.broadcast.emit('updateCanvas', drawing);
+    });
+    
+    socket.on('guess', function(word) {
+        socket.emit('guess', word);
+        socket.broadcast.emit('guess', word);
     });
 });
 

@@ -45,9 +45,11 @@ canvas {
 <div id="main">
     <h1>Pictionary</h1>
     <div id="top-message">
-    <div id="guess" style="display: none">
-        Make a guess: <input type="text">
+        <div id="guess">
+            Make a guess: <input type="text">
+            <br />
+            Current guess: <span id="guesses"></span>
+        </div>
     </div>
-</div>
     <canvas id="canvas"></canvas>
 </div>

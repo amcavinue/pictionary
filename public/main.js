@@ -10,7 +10,7 @@ $(document).mouseup(function() {
 });
 
 var pictionary = function() {
-    var canvas, context, guessBox;
+    var canvas, context, guessBox, guesses;
     
     var canvasHtml = document.getElementById('canvas');
     canvas = $('canvas');
@@ -35,15 +35,16 @@ var pictionary = function() {
         context.fill();
     };
     
+    guessBox = $('#guess input');
     var onKeyDown = function(event) {
         if (event.keyCode != 13) { // Enter
             return;
         }
-    
+
+        socket.emit('guess', guessBox.val());
         console.log(guessBox.val());
         guessBox.val('');
     };
-    guessBox = $('#guess input');
     guessBox.on('keydown', onKeyDown);
 
     canvas.on('mousemove', function(event) {
@@ -65,6 +66,11 @@ var pictionary = function() {
         var image = new Image();
         image.src = drawing;
         context.drawImage(image, 0, 0);
+    });
+    
+    guesses = $('#guesses');
+    socket.on('guess', function(word) {
+        guesses.text(word);
     });
 };
 

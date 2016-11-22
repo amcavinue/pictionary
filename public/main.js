@@ -1,11 +1,23 @@
+var mousedown = false;
+
+$(document).mousedown(function() {
+    mousedown = true;
+});
+
+$(document).mouseup(function() {
+    mousedown = false;
+});
+
 var pictionary = function() {
     var canvas, context;
 
     var draw = function(position) {
-        context.beginPath();
-        context.arc(position.x, position.y,
-                         6, 0, 2 * Math.PI);
-        context.fill();
+        if (mousedown) {
+            context.beginPath();
+            context.arc(position.x, position.y,
+                             6, 0, 2 * Math.PI);
+            context.fill();
+        }
     };
 
     canvas = $('canvas');

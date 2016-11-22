@@ -10,7 +10,7 @@ $(document).mouseup(function() {
 });
 
 var pictionary = function() {
-    var canvas, context, guessBox, guesses;
+    var canvas, context, guessBox, guesses, role, designatedDrawer = false;
     
     var canvasHtml = document.getElementById('canvas');
     canvas = $('canvas');
@@ -48,10 +48,13 @@ var pictionary = function() {
     guessBox.on('keydown', onKeyDown);
 
     canvas.on('mousemove', function(event) {
-        var offset = canvas.offset();
-        var position = {x: event.pageX - offset.left,
+        // Only the designated drawer gets to draw.
+        if (designatedDrawer) {
+            var offset = canvas.offset();
+            var position = {x: event.pageX - offset.left,
                         y: event.pageY - offset.top};
-        draw(position);
+            draw(position);
+        }
     });
     
     socket.on('drawing', function(position) {
@@ -62,7 +65,7 @@ var pictionary = function() {
         socket.emit('progressDrawing', canvas[0].toDataURL('image/png'));
     });
     
-    socket.on('updateCanvas', function(drawing) {
+    socket.on('progressDrawing', function(drawing) {
         var image = new Image();
         image.src = drawing;
         context.drawImage(image, 0, 0);
@@ -72,6 +75,17 @@ var pictionary = function() {
     socket.on('guess', function(word) {
         guesses.text(word);
     });
+    
+    role = $('#role');
+    socket.on('designated', function() {
+        role.empty().text('Designated Drawer');
+        designatedDrawer = true;
+    });
+    
+    socket.on('guesser', function() {
+        role.empty().text('Guesser');
+        designatedDrawer = false;
+    })
 };
 
 $(document).ready(function() {

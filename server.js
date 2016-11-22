@@ -8,7 +8,11 @@ app.use(express.static('public'));
 var server = http.Server(app);
 var io = socket_io(server);
 
+var designatedDrawerAssigned = false;
+
 io.on('connection', function (socket) {
+    var designatedDrawer = false;
+    
     socket.broadcast.emit('userOnline');
     
     socket.on('drawing', function(position) {
@@ -16,12 +20,28 @@ io.on('connection', function (socket) {
     });
     
     socket.on('progressDrawing', function(drawing) {
-        socket.broadcast.emit('updateCanvas', drawing);
+        socket.broadcast.emit('progressDrawing', drawing);
     });
     
     socket.on('guess', function(word) {
         socket.emit('guess', word);
         socket.broadcast.emit('guess', word);
+    });
+    
+    if (!designatedDrawerAssigned) {
+        designatedDrawerAssigned = true;
+        designatedDrawer = true;
+        
+        socket.emit('designated');
+    } else {
+        socket.emit('guesser');
+    }
+    
+    socket.on('disconnect', function () {
+        if (designatedDrawer) {
+            designatedDrawerAssigned = false;
+            designatedDrawer = false;
+        }
     });
 });
 

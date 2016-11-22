@@ -43,6 +43,14 @@ canvas {
     color: green;
 }
 
+#secret-word {
+    display: none;
+}
+
+#word {
+    color: purple;
+}
+
 </style>
 
 <!-- JS -->
@@ -60,6 +68,8 @@ canvas {
             Current guess: <span id="guesses"></span>
             <br />
             Your role: <span id="role"></span>
+            <br />
+            <span id="secret-word">Your word: <span id="word"></span></span>
         </div>
     </div>
     <canvas id="canvas"></canvas>

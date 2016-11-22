@@ -10,7 +10,22 @@ $(document).mouseup(function() {
 });
 
 var pictionary = function() {
-    var canvas, context, guessBox, guesses, role, designatedDrawer = false;
+    var canvas, context, guessBox, guesses, role, designatedDrawer = false, word, secretWord;
+    var words = [
+        "word", "letter", "number", "person", "pen", "class", "people",
+        "sound", "water", "side", "place", "man", "men", "woman", "women", "boy",
+        "girl", "year", "day", "week", "month", "name", "sentence", "line", "air",
+        "land", "home", "hand", "house", "picture", "animal", "mother", "father",
+        "brother", "sister", "world", "head", "page", "country", "question",
+        "answer", "school", "plant", "food", "sun", "state", "eye", "city", "tree",
+        "farm", "story", "sea", "night", "day", "life", "north", "south", "east",
+        "west", "child", "children", "example", "paper", "music", "river", "car",
+        "foot", "feet", "book", "science", "room", "friend", "idea", "fish",
+        "mountain", "horse", "watch", "color", "face", "wood", "list", "bird",
+        "body", "dog", "family", "song", "door", "product", "wind", "ship", "area",
+        "rock", "order", "fire", "problem", "piece", "top", "bottom", "king",
+        "space"
+    ];
     
     var canvasHtml = document.getElementById('canvas');
     canvas = $('canvas');
@@ -77,9 +92,13 @@ var pictionary = function() {
     });
     
     role = $('#role');
+    word = $('#word');
+    secretWord = $('#secret-word');
     socket.on('designated', function() {
         role.empty().text('Designated Drawer');
         designatedDrawer = true;
+        secretWord.show();
+        word.empty().text(words[Math.floor(Math.random() * words.length)]); // Get a random word from the array.
     });
     
     socket.on('guesser', function() {

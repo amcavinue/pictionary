@@ -10,7 +10,7 @@ $(document).mouseup(function() {
 });
 
 var pictionary = function() {
-    var canvas, context;
+    var canvas, context, guessBox;
     
     var canvasHtml = document.getElementById('canvas');
     canvas = $('canvas');
@@ -34,6 +34,17 @@ var pictionary = function() {
                          6, 0, 2 * Math.PI);
         context.fill();
     };
+    
+    var onKeyDown = function(event) {
+        if (event.keyCode != 13) { // Enter
+            return;
+        }
+    
+        console.log(guessBox.val());
+        guessBox.val('');
+    };
+    guessBox = $('#guess input');
+    guessBox.on('keydown', onKeyDown);
 
     canvas.on('mousemove', function(event) {
         var offset = canvas.offset();
